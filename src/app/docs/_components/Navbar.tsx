@@ -5,13 +5,21 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Rubik_Burned } from "next/font/google";
+
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
 
 import { createDocument, deleteDocument, getDocuments } from "./actions";
 
+const rubik = Rubik_Burned({ weight:"400", subsets:["latin"]});
+
 async function Navbar() {
+  const specialTextStyle = {
+    fontFamily: 'YourDesiredFont, sans-serif',
+  };
+
   const session = await auth();
   if (!session || !session?.user?.id) {
     redirect(publicEnv.NEXT_PUBLIC_BASE_URL);
@@ -19,80 +27,65 @@ async function Navbar() {
   const userId = session.user.id;
   const documents = await getDocuments(userId);
   return (
-    <nav className="flex w-full flex-col overflow-y-scroll bg-slate-100 pb-10">
-      <nav className="sticky top-0 flex flex-col items-center justify-between border-b bg-slate-100 pb-2">
+    <nav className="flex w-full h-auto bg-gray-700 text-slate-300 p-2">
+
+      {/* align left */}
+      <nav className="pl-3 sticky top-0 flex items-center justify-between text-4xl mr-8">
+        <p className={rubik.className}>
+          QUIZZZZZ
+        </p>
+      </nav>
+
+      {/* align right */}
+      <nav className="sticky top-0 flex items-center justify-between">
         <div className="flex w-full items-center justify-between px-3 py-1">
-          <div className="flex items-center gap-2">
+
+          <Link href={`/docs`} className="mr-4">
+            <Button
+              variant={"ghost"}
+              type={"submit"}
+              className="hover:bg-slate-600 hover:text-slate-300 text-lg"
+            >
+              My books
+            </Button>
+          </Link>
+
+          <Link href={`/docs`} className="mr-20">
+            <Button
+              variant={"ghost"}
+              type={"submit"}
+              className="hover:bg-slate-600 hover:text-slate-300 text-lg"
+            >
+              Public books
+            </Button>
+          </Link>
+        </div>
+      </nav>
+
+      <nav className="ml-auto sticky top-0 flex items-center justify-between">
+        <div className="flex w-full items-center justify-between px-3 py-1">
+
+          {/* user information */}
+          <div className="flex items-center gap-2 mr-4 text-lg">
             <RxAvatar />
-            <h1 className="text-sm font-semibold">
+            <h1 className="text-lg font-semibold">
               {session?.user?.username ?? "User"}
             </h1>
           </div>
+
+          {/* sign out button */}
           <Link href={`/auth/signout`}>
             <Button
               variant={"ghost"}
               type={"submit"}
-              className="hover:bg-slate-200"
+              className="hover:bg-slate-600 hover:text-slate-300 text-lg"
             >
               Sign Out
             </Button>
           </Link>
         </div>
 
-        <form
-          className="w-full hover:bg-slate-200"
-          action={async () => {
-            "use server";
-            const newDocId = await createDocument(userId);
-            revalidatePath("/docs");
-            redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/docs/${newDocId}`);
-          }}
-        >
-          <button
-            type="submit"
-            className="flex w-full items-center gap-2 px-3 py-1 text-left text-sm text-slate-500"
-          >
-            <AiFillFileAdd size={16} />
-            <p>Create Document</p>
-          </button>
-        </form>
       </nav>
-      <section className="flex w-full flex-col pt-3">
-        {documents.map((doc, i) => {
-          return (
-            <div
-              key={i}
-              className="group flex w-full cursor-pointer items-center justify-between gap-2 text-slate-400 hover:bg-slate-200 "
-            >
-              <Link
-                className="grow px-3 py-1"
-                href={`/docs/${doc.document.displayId}`}
-              >
-                <div className="flex items-center gap-2">
-                  <AiFillFileText />
-                  <span className="text-sm font-light ">
-                    {doc.document.title}
-                  </span>
-                </div>
-              </Link>
-              <form
-                className="hidden px-2 text-slate-400 hover:text-red-400 group-hover:flex"
-                action={async () => {
-                  "use server";
-                  const docId = doc.document.displayId;
-                  await deleteDocument(docId);
-                  revalidatePath("/docs");
-                  redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/docs`);
-                }}
-              >
-                <button type={"submit"}>
-                  <AiFillDelete size={16} />
-                </button>
-              </form>
-            </div>
-          );
-        })}
-      </section>
     </nav>
   );
 }
