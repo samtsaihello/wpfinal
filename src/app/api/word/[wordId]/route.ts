@@ -1,14 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { eq } from "drizzle-orm";
-// import Pusher from "pusher";
 
+// import Pusher from "pusher";
 import { db } from "@/db";
 import { wordsTable } from "@/db/schema";
 // import { auth } from "@/lib/auth";
 // import { privateEnv } from "@/lib/env/private";
 // import { publicEnv } from "@/lib/env/public";
-
 import type { Words, WordsUpdate } from "@/lib/types/db";
 
 // GET /api/word/:wordId
@@ -39,8 +38,7 @@ export async function GET(
         id: false,
         createAt: false,
       },
-      },
-    );
+    });
 
     const word: Words = {
       id: _word!.displayId,
@@ -49,13 +47,10 @@ export async function GET(
       familarity: _word!.familarity,
     };
 
-    return NextResponse.json(
-      { data: word },
-      { status: 200 },
-    );
+    return NextResponse.json({ data: word }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" }, 
+      { error: "Internal Server Error" },
       { status: 500 },
     );
   }
@@ -66,7 +61,9 @@ export async function GET(
 // create a new words
 export async function PUT(
   req: NextRequest,
-  { params }: { 
+  {
+    params,
+  }: {
     params: {
       wordId: string;
     };
@@ -96,7 +93,7 @@ export async function PUT(
       content: _word.content,
       meaning: _word.meaning,
       familarity: _word.familarity,
-    }
+    };
 
     // Trigger pusher event
     // const pusher = new Pusher({
@@ -111,10 +108,10 @@ export async function PUT(
     // console.log("HERE");
     // await pusher.trigger(`all`, "friend:change", {});
 
-    return NextResponse.json({ data: updatedWord }, { status: 200 })
+    return NextResponse.json({ data: updatedWord }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" }, 
+      { error: "Internal Server Error" },
       { status: 500 },
     );
   }
@@ -125,7 +122,9 @@ export async function PUT(
 // delete books
 export async function DELETE(
   req: NextRequest,
-  { params }: {
+  {
+    params,
+  }: {
     params: {
       wordId: string;
     };
@@ -159,9 +158,12 @@ export async function DELETE(
     // await pusher.trigger(`all`, "friend:delete", {});
     // console.log("TRIGGER END");
 
-    return NextResponse.json({
-      message: "Delete successfully",
-    }, { status: 200});
+    return NextResponse.json(
+      {
+        message: "Delete successfully",
+      },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },

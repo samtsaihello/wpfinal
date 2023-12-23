@@ -46,16 +46,16 @@ export const booksTable = pgTable(
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
     title: varchar("title", { length: 100 }).notNull(),
     description: text("description").notNull(),
-    language: varchar("language", {length: 100}).notNull(),
+    language: varchar("language", { length: 100 }).notNull(),
     publicize: boolean("publicize").default(false).notNull(),
     popularity: integer("popularity").default(0).notNull(),
     createAt: timestamp("create_at").defaultNow().notNull(),
     authorId: uuid("author_id")
-    .notNull()
-    .references(() => usersTable.displayId, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
+      .notNull()
+      .references(() => usersTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
@@ -66,7 +66,7 @@ export const booksRelations = relations(booksTable, ({ one, many }) => ({
   // books to users relation (one to one)
   author: one(usersTable, {
     fields: [booksTable.authorId],
-    references: [usersTable.displayId]
+    references: [usersTable.displayId],
   }),
 
   // books to words relation (one to many)
@@ -85,11 +85,11 @@ export const wordsTable = pgTable(
     createAt: timestamp("create_at").notNull().defaultNow(),
     // which book it belongs to
     bookId: uuid("book_id")
-    .notNull()
-    .references(() => booksTable.displayId, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
+      .notNull()
+      .references(() => booksTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
@@ -100,6 +100,6 @@ export const wordsRelations = relations(wordsTable, ({ one }) => ({
   // words to books relation (one to one)
   book: one(booksTable, {
     fields: [wordsTable.bookId],
-    references: [booksTable.displayId]
+    references: [booksTable.displayId],
   }),
 }));

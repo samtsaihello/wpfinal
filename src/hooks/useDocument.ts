@@ -1,4 +1,4 @@
-import { useEffect, useMemo,useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
@@ -32,8 +32,8 @@ export const useDocument = () => {
   const isSynced = useMemo(() => {
     if (debouncedDocument === null || debouncedDbDocument === null) return true;
     return (
-        debouncedDocument.title === debouncedDbDocument.title &&
-        debouncedDocument.content === debouncedDbDocument.content
+      debouncedDocument.title === debouncedDbDocument.title &&
+      debouncedDocument.content === debouncedDbDocument.content
     );
   }, [debouncedDocument, debouncedDbDocument]);
 
@@ -45,7 +45,7 @@ export const useDocument = () => {
   //              This useEffect will trigger twice: one when dbDocument is updated and another when debouncedDocument is updated.
   //              However, the two updates PUTs sends conflicting pusher events to the other clients, causing the document to twitch indefinitely.
   useEffect(() => {
-    // [NOTE] 2023.11.18 - If either of the debounced value is null, then `isSynced` must be true. 
+    // [NOTE] 2023.11.18 - If either of the debounced value is null, then `isSynced` must be true.
     //                     Therefore, we don't need to explicitly check for their null values.
     if (isSynced) return;
 
@@ -83,15 +83,18 @@ export const useDocument = () => {
 
     try {
       const channel = pusherClient.subscribe(channelName);
-      channel.bind("doc:update", ({ senderId, document: received_document }: PusherPayload) => {
-        if (senderId === userId) {
-          return;
-        }
-        // [NOTE] 2023.11.18 - This is the pusher event that updates the dbDocument.
-        setDocument(received_document);
-        setDbDocument(received_document);
-        router.refresh();
-      });
+      channel.bind(
+        "doc:update",
+        ({ senderId, document: received_document }: PusherPayload) => {
+          if (senderId === userId) {
+            return;
+          }
+          // [NOTE] 2023.11.18 - This is the pusher event that updates the dbDocument.
+          setDocument(received_document);
+          setDbDocument(received_document);
+          router.refresh();
+        },
+      );
     } catch (error) {
       console.error(error);
       router.push("/docs");

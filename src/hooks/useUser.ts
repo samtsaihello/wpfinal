@@ -4,11 +4,12 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { pusherClient } from "@/lib/pusher/client";
+
 // import type { Friend } from "@/lib/types/friend";
 
 export const useUser = () => {
   const [userId, setUserId] = useState("");
-//   const [friends, setFriends] = useState<Friend[]>([]);
+  //   const [friends, setFriends] = useState<Friend[]>([]);
 
   const router = useRouter();
 
@@ -39,7 +40,7 @@ export const useUser = () => {
       const ret = await res.json();
       //   console.log("CONSOLE", ret.data);
 
-    //   setFriends(ret.data);
+      //   setFriends(ret.data);
     };
     fetchFriend();
     router.refresh();

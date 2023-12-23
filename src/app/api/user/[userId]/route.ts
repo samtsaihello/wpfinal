@@ -1,21 +1,22 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { eq } from "drizzle-orm";
-// import Pusher from "pusher";
 
+// import Pusher from "pusher";
 import { db } from "@/db";
 import { usersTable, booksTable } from "@/db/schema";
 // import { auth } from "@/lib/auth";
 // import { privateEnv } from "@/lib/env/private";
 // import { publicEnv } from "@/lib/env/public";
-
-import type { Books, BooksCreate } from "@/lib/types/db.ts"
+import type { Books, BooksCreate } from "@/lib/types/db.ts";
 
 // GET /api/userId/:userId
 // return all his books
 export async function GET(
-  req: NextRequest, 
-  { params }: {
+  req: NextRequest,
+  {
+    params,
+  }: {
     params: {
       userId: string;
     };
@@ -29,7 +30,7 @@ export async function GET(
     // }
 
     // const userId = session?.user?.id;
-    const userId = params.userId
+    const userId = params.userId;
 
     const _booksdata = await db.query.usersTable.findFirst({
       where: eq(usersTable.displayId, userId),
@@ -40,18 +41,18 @@ export async function GET(
             id: false,
             createAt: false,
             authorId: false,
-          }
-        }
-      }
-    })
+          },
+        },
+      },
+    });
 
-    const booksdata: Books[] = _booksdata!.books!.map(book => ({
+    const booksdata: Books[] = _booksdata!.books!.map((book) => ({
       id: book.displayId,
       title: book.description,
       description: book.description,
       language: book.language,
       publicize: book.publicize,
-      popularity: book.popularity
+      popularity: book.popularity,
     }));
 
     return NextResponse.json({ data: booksdata }, { status: 200 });
@@ -68,8 +69,10 @@ export async function GET(
 // body: BooksCreate
 // create a new books
 export async function POST(
-  req: NextRequest, 
-  { params }: {
+  req: NextRequest,
+  {
+    params,
+  }: {
     params: {
       userId: string;
     };
@@ -88,13 +91,16 @@ export async function POST(
     const bookinfo: BooksCreate = await req.json();
 
     // creating a new chat room and return the chat room id
-    const [_book] = await db.insert(booksTable).values({
-      title: bookinfo.title,
-      description: bookinfo.description,
-      language: bookinfo.language,
-      publicize: bookinfo.publicize,
-      authorId: userId,
-    }).returning();
+    const [_book] = await db
+      .insert(booksTable)
+      .values({
+        title: bookinfo.title,
+        description: bookinfo.description,
+        language: bookinfo.language,
+        publicize: bookinfo.publicize,
+        authorId: userId,
+      })
+      .returning();
 
     const newBook: Books = {
       id: _book.displayId,
@@ -103,7 +109,7 @@ export async function POST(
       language: _book.language,
       publicize: _book.publicize,
       popularity: _book.popularity,
-    }
+    };
 
     // Trigger pusher event
     // const pusher = new Pusher({
@@ -118,7 +124,7 @@ export async function POST(
     // console.log("HERE");
     // await pusher.trigger(`all`, "friend:change", {});
 
-    return NextResponse.json({ data: newBook }, { status: 200 })
+    return NextResponse.json({ data: newBook }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error ", description: error },

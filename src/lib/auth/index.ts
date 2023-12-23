@@ -68,6 +68,6 @@ export const {
   },
   pages: {
     signIn: "/",
-    error: "/auth/error"
+    error: "/auth/error",
   },
 });

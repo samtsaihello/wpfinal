@@ -16,7 +16,7 @@ function ErrorPage() {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    router.push("/")
+    router.push("/");
   }, [router]);
 
   useEffect(() => {

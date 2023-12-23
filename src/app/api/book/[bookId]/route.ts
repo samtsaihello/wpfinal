@@ -1,14 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { eq } from "drizzle-orm";
-// import Pusher from "pusher";
 
+// import Pusher from "pusher";
 import { db } from "@/db";
 import { booksTable, wordsTable } from "@/db/schema";
 // import { auth } from "@/lib/auth";
 // import { privateEnv } from "@/lib/env/private";
 // import { publicEnv } from "@/lib/env/public";
-
 import type { Books, BooksUpdate, Words, WordsCreate } from "@/lib/types/db";
 
 // GET /api/book/:bookId
@@ -48,20 +47,17 @@ export async function GET(
       },
     });
 
-    const words: Words[] = _words!.words.map(word => ({
+    const words: Words[] = _words!.words.map((word) => ({
       id: word.displayId,
       content: word.content,
       meaning: word.meaning,
       familarity: word.familarity,
     }));
 
-    return NextResponse.json(
-      { data: words },
-      { status: 200 },
-    );
+    return NextResponse.json({ data: words }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" }, 
+      { error: "Internal Server Error" },
       { status: 500 },
     );
   }
@@ -72,7 +68,9 @@ export async function GET(
 // create a new words
 export async function POST(
   req: NextRequest,
-  { params }: { 
+  {
+    params,
+  }: {
     params: {
       bookId: string;
     };
@@ -91,18 +89,21 @@ export async function POST(
     const wordinfo: WordsCreate = await req.json();
 
     // creating a new chat room and return the chat room id
-    const [_word] = await db.insert(wordsTable).values({
-      content: wordinfo.content,
-      meaning: wordinfo.meaning,
-      bookId: bookId,
-    }).returning();
+    const [_word] = await db
+      .insert(wordsTable)
+      .values({
+        content: wordinfo.content,
+        meaning: wordinfo.meaning,
+        bookId: bookId,
+      })
+      .returning();
 
     const newWord: Words = {
       id: _word.displayId,
       content: _word.content,
       meaning: _word.meaning,
       familarity: _word.familarity,
-    }
+    };
 
     // Trigger pusher event
     // const pusher = new Pusher({
@@ -117,10 +118,10 @@ export async function POST(
     // console.log("HERE");
     // await pusher.trigger(`all`, "friend:change", {});
 
-    return NextResponse.json({ data: newWord }, { status: 200 })
+    return NextResponse.json({ data: newWord }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" }, 
+      { error: "Internal Server Error" },
       { status: 500 },
     );
   }
@@ -158,7 +159,7 @@ export async function PUT(
       language: _updatedBook.language,
       publicize: _updatedBook.publicize,
       popularity: _updatedBook.popularity,
-    }
+    };
 
     // Trigger pusher event
     // const pusher = new Pusher({
@@ -179,10 +180,7 @@ export async function PUT(
     //   },
     // });
 
-    return NextResponse.json(
-      { data: updatedBook },
-      { status: 200 },
-    );
+    return NextResponse.json({ data: updatedBook }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -233,9 +231,12 @@ export async function DELETE(
     // await pusher.trigger(`all`, "friend:delete", {});
     // console.log("TRIGGER END");
 
-    return NextResponse.json({
-      message: "Delete successfully",
-    }, { status: 200});
+    return NextResponse.json(
+      {
+        message: "Delete successfully",
+      },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },

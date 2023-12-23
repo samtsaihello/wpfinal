@@ -1,4 +1,4 @@
-import { useEffect, useMemo,useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
@@ -59,15 +59,18 @@ export const useDocument = () => {
 
     try {
       const channel = pusherClient.subscribe(channelName);
-      channel.bind("doc:update", ({ senderId, document: received_document }: PusherPayload) => {
-        if (senderId === userId) {
-          return;
-        }
-        // [NOTE] 2023.11.18 - This is the pusher event that updates the dbDocument.
-        setDocument(received_document);
-        setDbDocument(received_document);
-        router.refresh();
-      });
+      channel.bind(
+        "doc:update",
+        ({ senderId, document: received_document }: PusherPayload) => {
+          if (senderId === userId) {
+            return;
+          }
+          // [NOTE] 2023.11.18 - This is the pusher event that updates the dbDocument.
+          setDocument(received_document);
+          setDbDocument(received_document);
+          router.refresh();
+        },
+      );
     } catch (error) {
       console.error(error);
       router.push("/docs");
