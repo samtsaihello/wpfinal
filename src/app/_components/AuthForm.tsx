@@ -8,8 +8,10 @@ import Image from "next/image";
 // Run: npx shadcn-ui@latest add button
 import { Button } from "@/components/ui/button";
 // Run: npx shadcn-ui@latest add card
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { publicEnv } from "@/lib/env/public";
+
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import AuthInput from "./AuthInput";
 
@@ -32,11 +34,24 @@ function AuthForm() {
   };
   return (
     <Card className="min-w-[300px] bg-slate-600 text-slate-300 border-gray-900">
-      <CardHeader>
-        <CardTitle>Sign {isSignUp ? "Up" : "In"}</CardTitle>
-      </CardHeader>
       <CardContent className=" flex flex-col gap-2">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+          <Tabs
+              defaultValue="signin"
+              className="mt-3 w-full"
+              onValueChange={(value) => {
+                setIsSignUp(value === "signup");
+              }}
+            >
+            <TabsList className="w-full bg-slate-700">
+              <TabsTrigger value="signin" className={"w-full " + (isSignUp ? "" : "bg-slate-500")}>
+                Sign In
+              </TabsTrigger>
+              <TabsTrigger value="signup" className={"w-full " + (isSignUp ? "bg-slate-500" : "")}>
+                Sign Up
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
           <AuthInput
             label="Email"
             type="email"
@@ -65,31 +80,8 @@ function AuthForm() {
               setValue={setConfirmPassword}
             />
           )}
-          <div className="text-sm text-gray-400">
-            {isSignUp ? (
-              <span>
-                Already have an account?{" "}
-                <a
-                  className="cursor-pointer hover:underline"
-                  onClick={() => setIsSignUp(false)}
-                >
-                  Sign In
-                </a>
-              </span>
-            ) : (
-              <span>
-                Do not have an account?{" "}
-                <a
-                  className="cursor-pointer hover:underline"
-                  onClick={() => setIsSignUp(true)}
-                >
-                  Sign Up
-                </a>
-              </span>
-            )}
-          </div>
 
-          <Button type="submit" className="w-full text-slate-300">
+          <Button type="submit" className="w-full text-gray-200 bg-green-600 hover:bg-green-700 mt-3">
             Sign {isSignUp ? "Up" : "In"}
           </Button>
         </form>
@@ -106,7 +98,7 @@ function AuthForm() {
               callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/main`,
             });
           }}
-          className="flex w-full border-slate-900"
+          className="flex w-full bg-slate-200 text-slate-800 hover:bg-slate-300"
           variant={"outline"}
         >
           {/* Remember to copy "github.png" to ./public folder */}
