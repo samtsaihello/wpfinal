@@ -1,7 +1,7 @@
-import { AiFillDelete, AiFillFileAdd, AiFillFileText } from "react-icons/ai";
+// import { AiFillDelete, AiFillFileAdd, AiFillFileText } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 
-import { revalidatePath } from "next/cache";
+// import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -11,21 +11,18 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
 
-import { createDocument, deleteDocument, getDocuments } from "./actions";
+// import { createDocument, deleteDocument, getDocuments } from "./actions";
 
 const rubik = Rubik_Burned({ weight:"400", subsets:["latin"]});
 
 async function Navbar() {
-  const specialTextStyle = {
-    fontFamily: 'YourDesiredFont, sans-serif',
-  };
 
   const session = await auth();
   if (!session || !session?.user?.id) {
     redirect(publicEnv.NEXT_PUBLIC_BASE_URL);
   }
-  const userId = session.user.id;
-  const documents = await getDocuments(userId);
+  // const userId = session.user.id;
+  // const documents = await getDocuments(userId);
   return (
     <nav className="flex w-full h-auto bg-gray-700 text-slate-300 p-2">
 
@@ -40,7 +37,7 @@ async function Navbar() {
       <nav className="sticky top-0 flex items-center justify-between">
         <div className="flex w-full items-center justify-between px-3 py-1">
 
-          <Link href={`/docs`} className="mr-4">
+          <Link href={`/main/mybooks`} className="mr-4">
             <Button
               variant={"ghost"}
               type={"submit"}
@@ -50,7 +47,7 @@ async function Navbar() {
             </Button>
           </Link>
 
-          <Link href={`/docs`} className="mr-20">
+          <Link href={`/main/publicbooks`} className="mr-20">
             <Button
               variant={"ghost"}
               type={"submit"}

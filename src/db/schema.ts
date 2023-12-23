@@ -4,14 +4,14 @@ import {
   text,
   pgTable,
   serial,
+  integer,
   uuid,
   varchar,
-  unique,
+  boolean,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
-// Checkout the many-to-many relationship in the following tutorial:
-// https://orm.drizzle.team/docs/rqb#many-to-many
-
+// users information
 export const usersTable = pgTable(
   "users",
   {
@@ -33,65 +33,73 @@ export const usersTable = pgTable(
   }),
 );
 
+// user to books relation (one to many)
 export const usersRelations = relations(usersTable, ({ many }) => ({
-  usersToDocumentsTable: many(usersToDocumentsTable),
+  books: many(booksTable),
 }));
 
-export const documentsTable = pgTable(
-  "documents",
+// books
+export const booksTable = pgTable(
+  "books",
   {
     id: serial("id").primaryKey(),
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
     title: varchar("title", { length: 100 }).notNull(),
-    content: text("content").notNull(),
+    description: text("description").notNull(),
+    language: varchar("language", {length: 100}).notNull(),
+    publicize: boolean("publicize").default(false).notNull(),
+    popularity: integer("popularity").default(0).notNull(),
+    createAt: timestamp("create_at").defaultNow().notNull(),
+    authorId: uuid("author_id")
+    .notNull()
+    .references(() => usersTable.displayId, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
   }),
 );
 
-export const documentsRelations = relations(documentsTable, ({ many }) => ({
-  usersToDocumentsTable: many(usersToDocumentsTable),
+export const booksRelations = relations(booksTable, ({ one, many }) => ({
+  // books to users relation (one to one)
+  author: one(usersTable, {
+    fields: [booksTable.authorId],
+    references: [usersTable.displayId]
+  }),
+
+  // books to words relation (one to many)
+  words: many(wordsTable),
 }));
 
-export const usersToDocumentsTable = pgTable(
-  "users_to_documents",
+// vocabulary table
+export const wordsTable = pgTable(
+  "words",
   {
     id: serial("id").primaryKey(),
-    userId: uuid("user_id")
-      .notNull()
-      .references(() => usersTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-    documentId: uuid("document_id")
-      .notNull()
-      .references(() => documentsTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
+    displayId: uuid("display_id").defaultRandom().notNull().unique(),
+    content: text("content").notNull(),
+    meaning: text("meaning").notNull(),
+    familarity: integer("familarity").notNull().default(0),
+    createAt: timestamp("create_at").notNull().defaultNow(),
+    // which book it belongs to
+    bookId: uuid("book_id")
+    .notNull()
+    .references(() => booksTable.displayId, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   },
   (table) => ({
-    userAndDocumentIndex: index("user_and_document_index").on(
-      table.userId,
-      table.documentId,
-    ),
-    // This is a unique constraint on the combination of userId and documentId.
-    // This ensures that there is no duplicate entry in the table.
-    uniqCombination: unique().on(table.documentId, table.userId),
+    displayIdIndex: index("display_id_index").on(table.displayId),
   }),
 );
 
-export const usersToDocumentsRelations = relations(
-  usersToDocumentsTable,
-  ({ one }) => ({
-    document: one(documentsTable, {
-      fields: [usersToDocumentsTable.documentId],
-      references: [documentsTable.displayId],
-    }),
-    user: one(usersTable, {
-      fields: [usersToDocumentsTable.userId],
-      references: [usersTable.displayId],
-    }),
+export const wordsRelations = relations(wordsTable, ({ one }) => ({
+  // words to books relation (one to one)
+  book: one(booksTable, {
+    fields: [wordsTable.bookId],
+    references: [booksTable.displayId]
   }),
-);
+}));
