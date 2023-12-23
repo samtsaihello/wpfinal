@@ -31,7 +31,7 @@ function AuthForm() {
     });
   };
   return (
-    <Card className="min-w-[300px]">
+    <Card className="min-w-[300px] bg-slate-600 text-slate-300 border-gray-900">
       <CardHeader>
         <CardTitle>Sign {isSignUp ? "Up" : "In"}</CardTitle>
       </CardHeader>
@@ -65,7 +65,7 @@ function AuthForm() {
               setValue={setConfirmPassword}
             />
           )}
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-400">
             {isSignUp ? (
               <span>
                 Already have an account?{" "}
@@ -89,14 +89,14 @@ function AuthForm() {
             )}
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full text-slate-300">
             Sign {isSignUp ? "Up" : "In"}
           </Button>
         </form>
         <div className="flex w-full items-center gap-1 py-2">
-          <div className="h-[1px] grow border-t"></div>
+          <div className="h-[1px] grow border-t border-slate-300"></div>
           <p className="text-xs text-gray-400">or</p>
-          <div className="h-[1px] grow border-t"></div>
+          <div className="h-[1px] grow border-t border-slate-300"></div>
         </div>
 
         <Button
@@ -106,7 +106,7 @@ function AuthForm() {
               callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/main`,
             });
           }}
-          className="flex w-full"
+          className="flex w-full border-slate-900"
           variant={"outline"}
         >
           {/* Remember to copy "github.png" to ./public folder */}

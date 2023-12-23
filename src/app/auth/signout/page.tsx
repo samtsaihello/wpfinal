@@ -17,7 +17,7 @@ function SignOutPage() {
     router.push("/");
   }, [session, router]);
 
-  return <></>;
+  return <div className="bg-slate-800 h-screen w-screen"></div>;
 }
 
 export default SignOutPage;

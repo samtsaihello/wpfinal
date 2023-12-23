@@ -1,8 +1,16 @@
 import AuthForm from "./_components/AuthForm";
 
+import { Rubik_Burned } from "next/font/google";
+
+const rubik = Rubik_Burned({ weight: "400", subsets: ["latin"] });
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen w-screen flex-col items-center bg-slate-800">
+      <div className="h-8"></div>
+      <div className="m-10 text-8xl text-slate-200">
+        <p className={rubik.className}>QUIZZZ</p>
+      </div>
       <AuthForm />
     </main>
   );
