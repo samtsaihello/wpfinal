@@ -1,6 +1,4 @@
 // import { AiFillDelete, AiFillFileAdd, AiFillFileText } from "react-icons/ai";
-import { RxAvatar } from "react-icons/rx";
-
 import { Rubik_Burned } from "next/font/google";
 // import { revalidatePath } from "next/cache";
 import Link from "next/link";
@@ -9,6 +7,8 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
+
+import { Setting } from "./Setting";
 
 // import { createDocument, deleteDocument, getDocuments } from "./actions";
 
@@ -25,7 +25,9 @@ async function Navbar() {
     <nav className="flex h-auto w-full bg-gray-700 p-2 text-slate-300">
       {/* align left */}
       <nav className="sticky top-0 mr-8 flex items-center justify-between pl-3 text-4xl">
-        <p className={rubik.className}>QUIZZZZZ</p>
+        <Link className={rubik.className} href={`/main`}>
+          QUIZZZZZ
+        </Link>
       </nav>
 
       {/* align right */}
@@ -56,15 +58,12 @@ async function Navbar() {
       <nav className="sticky top-0 ml-auto flex items-center justify-between">
         <div className="flex w-full items-center justify-between px-3 py-1">
           {/* user information */}
-          <div className="mr-4 flex items-center gap-2 text-lg">
-            <RxAvatar />
-            <h1 className="text-lg font-semibold">
-              {session?.user?.username ?? "User"}
-            </h1>
+          <div className="mr-6 flex items-center gap-2 text-lg">
+            <Setting userName={session?.user?.username ?? "User"}></Setting>
           </div>
 
           {/* sign out button */}
-          <Link href={`/auth/signout`}>
+          {/* <Link href={`/auth/signout`}>
             <Button
               variant={"ghost"}
               type={"submit"}
@@ -72,7 +71,7 @@ async function Navbar() {
             >
               Sign Out
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </nav>
     </nav>

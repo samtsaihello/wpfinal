@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 function DocsPage() {
   return (
     <div className="flex h-[90vh] h-screen w-full items-center justify-center bg-gray-800">
-      <Button>Create new books</Button>
+      <Button>Find something...</Button>
       <div className="flex flex-col items-center justify-center">
         <BiError className="text-yellow-500" size={80} />
         <p className="text-sm font-semibold text-slate-300">
-          This is my book page! Still under development, please wait...
+          This is public book page! Still under development, please wait...
         </p>
       </div>
     </div>
