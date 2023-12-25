@@ -45,6 +45,10 @@ export async function GET(
       content: _word!.content,
       meaning: _word!.meaning,
       familarity: _word!.familarity,
+      star: _word!.star,
+      testNum: _word!.testNum,
+      correctNum: _word!.correctNum,
+      accuracy: _word!.accuracy,
     };
 
     return NextResponse.json({ data: word }, { status: 200 });
@@ -81,18 +85,32 @@ export async function PUT(
 
     const wordinfo: WordsUpdate = await req.json();
 
-    // creating a new chat room and return the chat room id
-    const [_word] = await db
+    // return word 
+    const [_wordTemp] = await db
       .update(wordsTable)
       .set(wordinfo)
       .where(eq(wordsTable.displayId, wordId))
       .returning();
+    
+    const updateAccuracy = {
+      accuracy: ((_wordTemp.testNum === 0) ? 0 : (_wordTemp.correctNum / _wordTemp.testNum))
+    }
+
+    const [_word] = await db
+    .update(wordsTable)
+    .set(updateAccuracy)
+    .where(eq(wordsTable.displayId, wordId))
+    .returning();
 
     const updatedWord: Words = {
       id: _word.displayId,
       content: _word.content,
       meaning: _word.meaning,
       familarity: _word.familarity,
+      star: _word.star,
+      testNum: _word.testNum,
+      correctNum: _word.correctNum,
+      accuracy: _word.accuracy,
     };
 
     // Trigger pusher event

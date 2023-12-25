@@ -9,6 +9,7 @@ import {
   varchar,
   boolean,
   timestamp,
+  real,
 } from "drizzle-orm/pg-core";
 
 // users information
@@ -81,7 +82,13 @@ export const wordsTable = pgTable(
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
     content: text("content").notNull(),
     meaning: text("meaning").notNull(),
+    // for private usage
     familarity: integer("familarity").notNull().default(0),
+    star: boolean("star").notNull().default(false),
+    // for public usage
+    testNum: integer("test_num").notNull().default(0),
+    correctNum: integer("correct_num").notNull().default(0),
+    accuracy: real("accuracy").notNull().default(0),
     createAt: timestamp("create_at").notNull().defaultNow(),
     // which book it belongs to
     bookId: uuid("book_id")

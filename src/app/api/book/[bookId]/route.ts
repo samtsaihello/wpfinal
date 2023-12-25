@@ -46,6 +46,10 @@ export async function GET(
             content: true,
             meaning: true,
             familarity: true,
+            star: true,
+            testNum: true,
+            correctNum: true,
+            accuracy: true,
           },
         },
       },
@@ -65,6 +69,10 @@ export async function GET(
       content: word.content,
       meaning: word.meaning,
       familarity: word.familarity,
+      star: word.star,
+      testNum: word.testNum,
+      correctNum: word.correctNum,
+      accuracy: word.accuracy,
     }));
 
     return NextResponse.json({ 
@@ -106,19 +114,23 @@ export async function POST(
 
     // creating a new chat room and return the chat room id
     const [_word] = await db
-      .insert(wordsTable)
-      .values({
-        content: wordinfo.content,
-        meaning: wordinfo.meaning,
-        bookId: bookId,
-      })
-      .returning();
+    .insert(wordsTable)
+    .values({
+      content: wordinfo.content,
+      meaning: wordinfo.meaning,
+      bookId: bookId,
+    })
+    .returning();
 
     const newWord: Words = {
       id: _word.displayId,
       content: _word.content,
       meaning: _word.meaning,
       familarity: _word.familarity,
+      star: false,
+      testNum: 0,
+      correctNum: 0,
+      accuracy: 0,
     };
 
     // Trigger pusher event
