@@ -34,7 +34,7 @@ export type Words = {
   content: string;
   meaning: string;
   // for private usage
-  familarity: number;
+  familiarity: number;
   star: boolean;
   // for public usage
   correctNum: number;

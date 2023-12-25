@@ -44,14 +44,14 @@ export async function POST(
             ( 
               testReq.publicize ? 
                 (wordsTable, { asc }) => [asc(wordsTable.accuracy)] :
-                (wordsTable, { asc }) => [asc(wordsTable.familarity)]
+                (wordsTable, { asc }) => [asc(wordsTable.familiarity)]
             ) : 
               undefined),
           columns: {
             displayId: true,
             content: true,
             meaning: true,
-            familarity: true,
+            familiarity: true,
             star: true,
             testNum: true,
             correctNum: true,
@@ -80,7 +80,7 @@ export async function POST(
                 id: word.displayId,
                 content: word.content,
                 meaning: word.meaning,
-                familarity: word.familarity,
+                familiarity: word.familiarity,
                 star: word.star,
                 testNum: word.testNum,
                 correctNum: word.correctNum,
@@ -134,7 +134,7 @@ export async function POST(
                 id: word.displayId,
                 content: word.content,
                 meaning: word.meaning,
-                familarity: word.familarity,
+                familiarity: word.familiarity,
                 star: word.star,
                 testNum: word.testNum,
                 correctNum: word.correctNum,

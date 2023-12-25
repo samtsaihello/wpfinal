@@ -1,51 +1,14 @@
-import Link from "next/link";
+import { columns } from "./_components/columns"
+import { DataTable } from "./_components/data-table"
 
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import type { Words } from "@/lib/types/db";
+
+import memoryDB from "./memory"
 
 function BookPage() {
+
   const bookName = "SAMPLE book name";
   const ___bookId = "sample_book_id";
-  const words: Words[] = [
-    {
-      id: "232",
-      content: "Hello",
-      meaning: "你好",
-      familarity: 0,
-    },
-    {
-      id: "233",
-      content: "Hello",
-      meaning: "你好",
-      familarity: 0,
-    },
-    {
-      id: "234",
-      content: "Hello",
-      meaning: "你好",
-      familarity: 0,
-    },
-    {
-      id: "235",
-      content: "Hello",
-      meaning: "你好",
-      familarity: 0,
-    },
-    {
-      id: "236",
-      content: "Hello",
-      meaning: "你好",
-      familarity: 0,
-    },
-  ];
 
   return (
     <div className="w-screen bg-gray-800 text-4xl text-white">
@@ -55,33 +18,11 @@ function BookPage() {
           Create new word
         </Button>
       </div>
-      <div className="m-6">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-slate-800">
-              <TableHead>Word</TableHead>
-              <TableHead>Meaning</TableHead>
-              <TableHead>Familiarity</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {words.map((word) => (
-              <Link
-                key={word.id}
-                legacyBehavior={true}
-                href={`/main/mybooks/${___bookId}/${word.id}`}
-              >
-                <TableRow key={word.id} className="border-slate-500">
-                  <TableCell className="w-2/5">{word.content}</TableCell>
-                  <TableCell className="w-2/5">{word.meaning}</TableCell>
-                  <TableCell className="w-1/5">{word.familarity}</TableCell>
-                </TableRow>
-              </Link>
-            ))}
-          </TableBody>
-        </Table>
+      <div className="container mx-auto py-10">
+        <DataTable columns={columns} data={memoryDB} bookId={___bookId}/>
       </div>
     </div>
-  );
+  )
 }
+
 export default BookPage;

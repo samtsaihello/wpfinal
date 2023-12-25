@@ -83,7 +83,7 @@ export const wordsTable = pgTable(
     content: text("content").notNull(),
     meaning: text("meaning").notNull(),
     // for private usage
-    familarity: integer("familarity").notNull().default(0),
+    familiarity: integer("familiarity").notNull().default(0),
     star: boolean("star").notNull().default(false),
     // for public usage
     testNum: integer("test_num").notNull().default(0),
