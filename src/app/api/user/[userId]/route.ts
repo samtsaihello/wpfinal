@@ -8,7 +8,7 @@ import { usersTable, booksTable } from "@/db/schema";
 // import { auth } from "@/lib/auth";
 // import { privateEnv } from "@/lib/env/private";
 // import { publicEnv } from "@/lib/env/public";
-import type { Books, BooksCreate } from "@/lib/types/db.ts";
+import type { UserPublicInfo, Books, BooksCreate } from "@/lib/types/db.ts";
 
 // GET /api/userId/:userId
 // return all his books
@@ -34,7 +34,10 @@ export async function GET(
 
     const _booksdata = await db.query.usersTable.findFirst({
       where: eq(usersTable.displayId, userId),
-      columns: {},
+      columns: {
+        displayId: true,
+        username: true,
+      },
       with: {
         books: {
           columns: {
@@ -46,6 +49,11 @@ export async function GET(
       },
     });
 
+    const userInfo: UserPublicInfo = {
+      id: _booksdata!.displayId,
+      username: _booksdata!.username,
+    };
+
     const booksdata: Books[] = _booksdata!.books!.map((book) => ({
       id: book.displayId,
       title: book.description,
@@ -55,7 +63,10 @@ export async function GET(
       popularity: book.popularity,
     }));
 
-    return NextResponse.json({ data: booksdata }, { status: 200 });
+    return NextResponse.json({ 
+      info: userInfo,
+      data: booksdata,
+    }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

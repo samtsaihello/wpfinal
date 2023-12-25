@@ -34,7 +34,11 @@ export async function GET(
     // Get the book
     const _words = await db.query.booksTable.findFirst({
       where: eq(booksTable.displayId, bookId),
-      columns: {},
+      columns: {
+        id: false,
+        createAt: false,
+        authorId: false,
+      },
       with: {
         words: {
           columns: {
@@ -47,6 +51,15 @@ export async function GET(
       },
     });
 
+    const bookInfo: Books = {
+      id: _words!.displayId,
+      title: _words!.title,
+      description: _words!.description,
+      language: _words!.language,
+      publicize: _words!.publicize,
+      popularity: _words!.popularity,
+    }
+
     const words: Words[] = _words!.words.map((word) => ({
       id: word.displayId,
       content: word.content,
@@ -54,7 +67,10 @@ export async function GET(
       familarity: word.familarity,
     }));
 
-    return NextResponse.json({ data: words }, { status: 200 });
+    return NextResponse.json({ 
+      info: bookInfo, 
+      data: words 
+    }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },
