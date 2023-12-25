@@ -9,9 +9,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 // Run: npx shadcn-ui@latest add card
 import { Card, CardContent } from "@/components/ui/card";
-import { publicEnv } from "@/lib/env/public";
-
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { publicEnv } from "@/lib/env/public";
 
 import AuthInput from "./AuthInput";
 
@@ -33,21 +32,27 @@ function AuthForm() {
     });
   };
   return (
-    <Card className="min-w-[300px] bg-slate-600 text-slate-300 border-gray-900">
+    <Card className="min-w-[300px] border-gray-900 bg-slate-600 text-slate-300">
       <CardContent className=" flex flex-col gap-2">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <Tabs
-              defaultValue="signin"
-              className="mt-3 w-full"
-              onValueChange={(value) => {
-                setIsSignUp(value === "signup");
-              }}
-            >
+            defaultValue="signin"
+            className="mt-3 w-full"
+            onValueChange={(value) => {
+              setIsSignUp(value === "signup");
+            }}
+          >
             <TabsList className="w-full bg-slate-700">
-              <TabsTrigger value="signin" className={"w-full " + (isSignUp ? "" : "bg-slate-500")}>
+              <TabsTrigger
+                value="signin"
+                className={"w-full " + (isSignUp ? "" : "bg-slate-500")}
+              >
                 Sign In
               </TabsTrigger>
-              <TabsTrigger value="signup" className={"w-full " + (isSignUp ? "bg-slate-500" : "")}>
+              <TabsTrigger
+                value="signup"
+                className={"w-full " + (isSignUp ? "bg-slate-500" : "")}
+              >
                 Sign Up
               </TabsTrigger>
             </TabsList>
@@ -81,7 +86,10 @@ function AuthForm() {
             />
           )}
 
-          <Button type="submit" className="w-full text-gray-200 bg-green-600 hover:bg-green-700 mt-3">
+          <Button
+            type="submit"
+            className="mt-3 w-full bg-green-600 text-gray-200 hover:bg-green-700"
+          >
             Sign {isSignUp ? "Up" : "In"}
           </Button>
         </form>

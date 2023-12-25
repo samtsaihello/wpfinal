@@ -1,10 +1,7 @@
-
-
 function BookPage() {
-
   return (
-    <div className="w-screen text-white text-4xl m-6 bg-gray-800">
-        Still under development...
+    <div className="m-6 w-screen bg-gray-800 text-4xl text-white">
+      Still under development...
     </div>
   );
 }

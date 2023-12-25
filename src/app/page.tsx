@@ -1,6 +1,6 @@
-import AuthForm from "./_components/AuthForm";
-
 import { Rubik_Burned } from "next/font/google";
+
+import AuthForm from "./_components/AuthForm";
 
 const rubik = Rubik_Burned({ weight: "400", subsets: ["latin"] });
 

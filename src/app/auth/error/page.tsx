@@ -37,7 +37,7 @@ function ErrorPage() {
   }, [showToast, toast]);
 
   return (
-    <div className="bg-slate-800 h-screen w-screen">
+    <div className="h-screen w-screen bg-slate-800">
       <Toaster />
     </div>
   );

@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 // import { and, eq } from "drizzle-orm";
-
 // import { db } from "@/db";
 // import { usersToDocumentsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
