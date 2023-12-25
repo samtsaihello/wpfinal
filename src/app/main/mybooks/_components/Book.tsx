@@ -2,6 +2,8 @@ import type { Books } from "@/lib/types/db";
 
 import { Badge } from "@/components/ui/badge"
 
+import Link from "next/link";
+
 function Book({info} : {info: Books}) {
 
   function getLength(str: string){ 
@@ -24,24 +26,26 @@ function Book({info} : {info: Books}) {
   };
 
   return (
-    <div className="text-slate-100 m-3 border-2 rounded-lg border-slate-600">
-      <div className="flex-col w-80 p-4">
-        <div className="p-2 text-xl font-bold text-slate-200" style={{position: "relative"}}>
-          <p>{cutString(info.title, 25)}</p>
-        </div>
-        <div className="text-slate-500 h-16 p-2">
-          <p>{cutString(info.description, 65)}</p>
-        </div>
-        <div className="flex-col p-2">
-          <Badge variant="outline" className="text-slate-100 mr-3 bg-blue-600 border-slate-800">
-            {info.language}
-          </Badge>
-          <Badge variant="outline" className={"text-slate-100 border-slate-800 " + (info.publicize ? " bg-green-600 " : " bg-orange-600 ")}>
-            {info.publicize ? "Public" : "Private"}
-          </Badge>
+    <Link href={`/main/mybooks/${info.id}`}>
+      <div className="text-slate-100 m-3 border-2 rounded-lg border-slate-600">
+        <div className="flex-col w-80 p-4">
+          <div className="p-2 text-xl font-bold text-slate-200" style={{position: "relative"}}>
+            <p>{cutString(info.title, 25)}</p>
+          </div>
+          <div className="text-slate-500 h-16 p-2">
+            <p>{cutString(info.description, 65)}</p>
+          </div>
+          <div className="flex-col p-2">
+            <Badge variant="outline" className="text-slate-100 mr-3 bg-blue-600 border-slate-800">
+              {info.language}
+            </Badge>
+            <Badge variant="outline" className={"text-slate-100 border-slate-800 " + (info.publicize ? " bg-green-600 " : " bg-orange-600 ")}>
+              {info.publicize ? "Public" : "Private"}
+            </Badge>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 export default Book;
